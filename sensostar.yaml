@@ -3,18 +3,23 @@ esphome:
   comment: SensoStar Energy Meter
   platformio_options:
     board_build.arduino.memory_type: qio_opi
+  on_boot:
+    then:
+      - output.turn_on: adc_control  # IO14 HIGH at boot
     
 esp32:
   board: esp32-s3-devkitc-1
   flash_size: 8MB
   framework:
-    type: arduino
+    type: esp-idf
     
 psram:
   mode: octal
   speed: 80MHz
 
 wifi:
+  ssid: "ssid"
+  password: "password"
   ap:
     ssid: "SensoStar"
   reboot_timeout: 0s  
@@ -24,7 +29,11 @@ captive_portal:
 logger:
   level: info
   hardware_uart: UART0
-  baud_rate: 0
+  baud_rate: 115200
+
+api:
+  encryption:
+    key: "key"
     
 ota:
   platform: esphome
@@ -38,7 +47,7 @@ external_components:
     components: [uart]
   - source:
       type: git
-      url: https://github.com/brambo123/esphome-sensostar
+      url: https://github.com/STB3/esphome-sensostar
     components: [ SensoStar_MBus ]
 
 time:
@@ -54,18 +63,6 @@ uart:
     baud_rate: 2400
     parity: EVEN
     rx_full_threshold: 1
-    
-  - id: uart_modbus
-    tx_pin: GPIO20
-    rx_pin: GPIO3
-    parity: EVEN
-    baud_rate: 9600
-    
-modbus:
-  - id: modbus1
-    uart_id: uart_modbus
-    send_wait_time: 400ms
-    flow_control_pin: GPIO46
     
 SensoStar_MBus:
   id: sensostar_id
@@ -88,8 +85,41 @@ sensor:
       name: "SensoStar Return Temperature"
     temperature_diff:
       name: "SensoStar Temperature Difference"
+      
+  - platform: adc
+    pin: GPIO1
+    id: adc_input_sensor
+    name: "SensoStar Battery Level"
+    update_interval: never  # Only update manually
+    filters:
+      - lambda: return x * 3.2; # Vbat is measured via a resistive divider 33k--o--15k
 
 text_sensor:
   - platform: SensoStar_MBus
     status:
       name: "SensoStar Status"
+
+output:
+  - platform: gpio
+    pin: GPIO14
+    id: adc_control
+ 
+script:
+  - id: read_adc_script
+    then:
+      - output.turn_off: adc_control     # Set IO14 LOW
+      - delay: 8ms  # wait until the capacitor on the resistive divider is charged
+      - component.update: adc_input_sensor  # Trigger ADC read
+      - output.turn_on: adc_control      # Set IO14 HIGH
+
+interval:
+  - interval: 600s
+    then:
+      - script.execute: read_adc_script
+
+button:
+  - platform: template
+    name: "Read battery level now"
+    on_press:
+      then:
+        - script.execute: read_adc_script
