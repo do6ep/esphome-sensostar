@@ -13,6 +13,9 @@ void SensoStarComponent::setup() { }
 void SensoStarComponent::dump_config() {
     ESP_LOGCONFIG(TAG, "SensoStar M-Bus:");
     this->check_uart_settings(2400, 1, uart::UART_CONFIG_PARITY_EVEN, 8);
+    if (this->data_led_ != nullptr) {
+        ESP_LOGCONFIG(TAG, "  Data LED: Present");
+    }	
 }
 
 void SensoStarComponent::update() {
@@ -50,10 +53,21 @@ void SensoStarComponent::publish_nans_(){
 #endif
 }
 
-
+void SensoStarComponent::flash_data_led_() {
+    if (this->data_led_ != nullptr) {
+        this->data_led_->turn_on();
+        this->data_led_off_time_ = millis() + 200; // Set turn-off time 200ms in the future
+    }
+}
 
 void SensoStarComponent::loop() {
     const uint32_t now = millis();
+
+    // Turn off data LED if the time has passed
+    if (this->data_led_ != nullptr && this->data_led_off_time_ != 0 && now >= this->data_led_off_time_) {
+        this->data_led_->turn_off();
+        this->data_led_off_time_ = 0;
+    }
 
     if ( this->receiving_ > 0 && ( now - this->last_transmission_ >= 500 ) ) {
         ESP_LOGW(TAG, "Last transmission too long ago. Reset RX index.");
@@ -117,6 +131,7 @@ void SensoStarComponent::loop() {
                 }
                 else {
                     // Decode
+					this->flash_data_led_(); // Flash LED when new data arrived
                     uint8_t i = 19; // Skip start header and fixed data header
                     while(i < this->data_.size()-3){
                         
@@ -356,3 +371,4 @@ float SensoStarComponent::get_setup_priority() const { return setup_priority::DA
 
 }  // namespace sensostar
 }  // namespace esphome
+

@@ -14,7 +14,13 @@ Supported readings:
 - Volume [m³]
 - Status
 
-Button for reading the internal battery in Homeassistant
+Button for reading the internal battery in Homeassistant instantaneously
+
+4 LEDs indicating:
+- Flash programming
+- WiFi connected
+- Heartbeat
+- New data from Sensostar heat meter
 
 HowTo build:
 - Install ESPHome

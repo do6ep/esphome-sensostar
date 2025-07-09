@@ -9,6 +9,7 @@
 #include "esphome/components/text_sensor/text_sensor.h"
 #endif
 #include "esphome/components/uart/uart.h"
+#include "esphome/components/output/binary_output.h" // LED related
 
 #include <vector>
 
@@ -33,7 +34,8 @@ class SensoStarComponent : public PollingComponent, public uart::UARTDevice {
   SUB_TEXT_SENSOR(status)
 #endif
 
-
+  void set_data_led(output::BinaryOutput *data_led) { this->data_led_ = data_led; } // flash LED 
+  
   void setup() override;
   void dump_config() override;
   void update() override;
@@ -43,6 +45,7 @@ class SensoStarComponent : public PollingComponent, public uart::UARTDevice {
 
  protected:
   void publish_nans_();
+  void flash_data_led_(); // function for flashing the LED on updated values
     
   std::vector<uint8_t> data_;
   uint8_t receiving_{0};
@@ -50,7 +53,10 @@ class SensoStarComponent : public PollingComponent, public uart::UARTDevice {
   bool trigger_next_;
   bool FCB_;
   uint8_t init_state_{0};
+  output::BinaryOutput *data_led_{nullptr}; // LED related
+  uint32_t data_led_off_time_{0}; // LED related
 };
 
 }  // namespace sensostar
 }  // namespace esphome
+
