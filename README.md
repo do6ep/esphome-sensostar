@@ -2,7 +2,7 @@
 
 **Custom ESPHome Component for Engelmann SensoStar Heat Meters**
 
-This ESPHome integration enables reading detailed heat consumption data from Engelmann SensoStar M-Bus heat meters and makes it available in Home Assistant.
+This ESPHome integration enables reading detailed heat consumption data from Engelmann SensoStar U heat meters and makes it available in Home Assistant.
 
 ---
 
@@ -38,7 +38,7 @@ This ESPHome integration enables reading detailed heat consumption data from Eng
 ## 🧪 Requirements
 
 - ESP32-S3 DevKitC-1 (8MB Flash, with PSRAM)
-- Engelmann SensoStar meter with M-Bus interface
+- Engelmann SensoStar U meter without any optional interfaces
 - ESPHome installed on your system
 - Home Assistant (optional but recommended)
 
