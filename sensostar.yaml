@@ -6,6 +6,7 @@ esphome:
   on_boot:
     then:
       - output.turn_on: adc_control  # IO14 HIGH at boot
+      - script.execute: read_adc_script  # Immediately read ADC once at boot
     
 esp32:
   board: esp32-s3-devkitc-1
@@ -18,12 +19,17 @@ psram:
   speed: 80MHz
 
 wifi:
-  ssid: "ssid"
-  password: "password"
+  ssid: "SSID"
+  password: "PASSWORD"
   ap:
     ssid: "SensoStar"
-  reboot_timeout: 0s  
-
+  reboot_timeout: 0s 
+  
+  on_connect:
+    - output.turn_on: wifi_led
+  on_disconnect:
+    - output.turn_off: wifi_led
+    
 captive_portal:
 
 logger:
@@ -33,7 +39,7 @@ logger:
 
 api:
   encryption:
-    key: "key"
+    key: "base64 32bytes"   # to create use: openssl rand -base64 32
     
 ota:
   platform: esphome
@@ -46,8 +52,10 @@ external_components:
   - source: github://pr#8103
     components: [uart]
   - source:
-      type: git
-      url: https://github.com/STB3/esphome-sensostar
+      type: local
+      path: C:\Users\Dirk\Documents\esphome\esphome-sensostar\components
+      #type: git
+      #url: https://github.com/STB3/esphome-sensostar
     components: [ SensoStar_MBus ]
 
 time:
@@ -68,6 +76,7 @@ SensoStar_MBus:
   id: sensostar_id
   uart_id: uart_mbus
   update_interval: 10s
+  data_led: mbus_data_led # Add this line, linking to the output below
 
 sensor:
   - platform: SensoStar_MBus
@@ -103,6 +112,15 @@ output:
   - platform: gpio
     pin: GPIO14
     id: adc_control
+  - platform: gpio
+    pin: GPIO42
+    id: heartbeat_output
+  - platform: gpio
+    pin: GPIO2
+    id: wifi_led
+  - platform: gpio
+    pin: GPIO41
+    id: mbus_data_led    
  
 script:
   - id: read_adc_script
@@ -116,6 +134,11 @@ interval:
   - interval: 600s
     then:
       - script.execute: read_adc_script
+  - interval: 5s
+    then:
+      - light.turn_on: heartbeat_led
+      - delay: 500ms
+      - light.turn_off: heartbeat_led      
 
 button:
   - platform: template
@@ -123,3 +146,11 @@ button:
     on_press:
       then:
         - script.execute: read_adc_script
+        
+light:
+  - platform: binary
+    id: heartbeat_led
+    output: heartbeat_output
+    internal: true  # hide from Home Assistant unless needed
+    
+ 
