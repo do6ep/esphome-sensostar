@@ -104,6 +104,11 @@ sensor:
     filters:
       - lambda: return x * 3.2; # Vbat is measured via a resistive divider 33k--o--15k
 
+  - platform: wifi_signal
+    name: "SensoStar WiFi Signal"
+    id: wifi_signal_sensor
+    update_interval: 60s      
+
 text_sensor:
   - platform: SensoStar_MBus
     status:
@@ -147,6 +152,11 @@ button:
     on_press:
       then:
         - script.execute: read_adc_script
+  - platform: template
+    name: "Read WiFi Signal Now"
+    on_press:
+      then:
+        - component.update: wifi_signal_sensor        
         
 light:
   - platform: binary
