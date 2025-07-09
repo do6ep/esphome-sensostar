@@ -5,10 +5,10 @@ Provides the data from a Engelmann SensoStar heat meter to HomeAssitant
 
 Supported readings:
 - Voltage level of the internal battery
-- Energy {kWh]
+- Energy [kWh]
 - Flow [m³/h]
-- Flow temperature °C
-- Return temperature °C
+- Flow temperature [°C]
+- Return temperature [°C]
 - Power [W]
 - Temperature difference in/out
 - Volume [m³]

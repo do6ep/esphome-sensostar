@@ -19,8 +19,8 @@ psram:
   speed: 80MHz
 
 wifi:
-  ssid: "SSID"
-  password: "PASSWORD"
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
   ap:
     ssid: "SensoStar"
   reboot_timeout: 0s 
@@ -39,7 +39,7 @@ logger:
 
 api:
   encryption:
-    key: "base64 32bytes"   # to create use: openssl rand -base64 32
+    key: !secret api_encryption_key # create use openssl rand -base64 32
     
 ota:
   platform: esphome
@@ -53,9 +53,10 @@ external_components:
     components: [uart]
   - source:
       type: local
-      path: C:\Users\Dirk\Documents\esphome\esphome-sensostar\components
-      #type: git
-      #url: https://github.com/STB3/esphome-sensostar
+      path: !secret local_path
+      #type: git                                         # Be careful ESPhome is caching the repository. Do the following to update the cache
+      #url: https://github.com/STB3/esphome-sensostar    # Deleting the .esphome/external_components/ cache, or 
+      #ref: main  # or a specific commit SHA             # Using a ref: to pin to a specific commit or branch.
     components: [ SensoStar_MBus ]
 
 time:
