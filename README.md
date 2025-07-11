@@ -39,10 +39,33 @@ This ESPHome integration enables reading detailed heat consumption data from Eng
 
 - ESP32-S3 DevKitC-1 (8MB Flash)
 - Engelmann SensoStar U meter without any optional interfaces
-<img src="pictures/Sensostar_internal_connector.png" alt="SensoStar Hardware" width="400px">
 - ESPHome installed on your system
 - Home Assistant (optional but recommended)
 
+---
+
+## 🔌 Hardware Wiring
+
+The SensoStar meter uses a 12-pin internal connector for communication and power. Below is the pinout and how to wire it to an ESP32-S3:
+
+| Pin | Function                     | Connection                                     |
+|-----|------------------------------|------------------------------------------------|
+| 1   | NC                           | —                                              |
+| 2   | GND                          | Connect to ESP32 GND                           |
+| 3   | VCC                          | Connected to the internal battery of the meter |
+| 4   | NC                           | —                                              |
+| 5   | RX                           | Connect to ESP32 UART TX                       |
+| 6   | TX                           | Connect to ESP32 UART RX                       |
+| 7   | NC                           | —                                              |
+| 8   | NC                           | —                                              |
+| 9   | NC                           | —                                              |
+|10   | HW Detect (56kΩ to GND)      | Connect a 56kΩ resistor to GND                 |
+|11   | NC                           | —                                              |
+|12   | GND                          | Connect to ESP32 GND                           |
+
+> **Note:** "NC" means *Not Connected*. Be sure to use level shifting or protective circuitry if needed, depending on your ESP32 model and power requirements.
+
+<img src="pictures/Sensostar_internal_connector.png" alt="SensoStar Hardware" width="500px">
 ---
 
 ## 🚀 Setup Instructions
