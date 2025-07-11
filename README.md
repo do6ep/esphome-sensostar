@@ -37,8 +37,9 @@ This ESPHome integration enables reading detailed heat consumption data from Eng
 
 ## 🧪 Requirements
 
-- ESP32-S3 DevKitC-1 (8MB Flash, with PSRAM)
+- ESP32-S3 DevKitC-1 (8MB Flash)
 - Engelmann SensoStar U meter without any optional interfaces
+<img src="pictures/Sensostar_internal_connector" alt="SensoStar Hardware" width="400px">
 - ESPHome installed on your system
 - Home Assistant (optional but recommended)
 
