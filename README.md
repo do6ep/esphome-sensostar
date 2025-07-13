@@ -66,6 +66,26 @@ The SensoStar meter uses a 12-pin internal connector for communication and power
 > **Note:** "NC" means *Not Connected*. Be sure to use level shifting or protective circuitry if needed, depending on your ESP32 model and power requirements.
 
 <img src="pictures/Sensostar_internal_connector.png" alt="SensoStar Hardware" width="500px">
+
+---
+
+## 📷 Example Hardware
+
+Below is a visual example of the wired hardware setup.
+
+### Image
+
+<img src="pictures/sensostar_hw1.png" alt="SensoStar Hardware Example" width="400px">
+<img src="pictures/sensostar_hw1.png" alt="SensoStar Hardware Example" width="200px">
+
+
+### Video
+
+<video width="400" controls>
+  <source src="pictures/sensostar_hw.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 ---
 
 ## 🚀 Setup Instructions
