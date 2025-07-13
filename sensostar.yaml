@@ -100,9 +100,9 @@ sensor:
     pin: GPIO1
     id: adc_input_sensor
     name: "SensoStar Battery Level"
-    update_interval: never  # Only update manually
+    update_interval: 600s  # every 10 min.
     filters:
-      - lambda: return x * 3.2; # Vbat is measured via a resistive divider 33k--o--15k
+      - lambda: return x * 3.6 * 0.919; # Vbat is measured via a resistive divider 39k--o--15k, 0.919 ADC special scaling factor hand measured
 
   - platform: wifi_signal
     name: "SensoStar WiFi Signal"
