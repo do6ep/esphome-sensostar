@@ -26,6 +26,7 @@ This ESPHome integration enables reading detailed heat consumption data from Eng
 
 - 🕹 **Controls**
   - Template button in Home Assistant for instant battery reading
+  - Template button in Home Assistant for instant Wi-Fi signal strength reading
 
 - 💡 **LED Indicators**
   - Flash programming
@@ -78,13 +79,6 @@ Below is a visual example of the wired hardware setup.
 <img src="pictures/sensostar_hw_1.png" alt="SensoStar Hardware Example" width="400px">
 
 <img src="pictures/sensostar_hw_2.png" alt="SensoStar Hardware Example" width="400px">
-
-### Video
-
-<video width="400" controls>
-  <source src="pictures/sensostar_hw.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
 
 ---
 

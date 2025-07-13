@@ -100,7 +100,7 @@ sensor:
     pin: GPIO1
     id: adc_input_sensor
     name: "SensoStar Battery Level"
-    update_interval: 600s  # every 10 min.
+    update_interval: never  # done by interval:
     filters:
       - lambda: return x * 3.6 * 0.919; # Vbat is measured via a resistive divider 39k--o--15k, 0.919 ADC special scaling factor hand measured
 
