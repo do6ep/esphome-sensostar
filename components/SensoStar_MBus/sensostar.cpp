@@ -47,6 +47,8 @@ void SensoStarComponent::publish_nans_(){
         this->temperature_return_sensor_->publish_state(NAN);
     if (this->temperature_diff_sensor_)
         this->temperature_diff_sensor_->publish_state(NAN);
+    if (this->calculated_power_sensor_)
+        this->calculated_power_sensor_->publish_state(NAN);
 #endif
 }
 
@@ -116,6 +118,9 @@ void SensoStarComponent::loop() {
                     ESP_LOGW(TAG, "Unknown frame");
                 }
                 else {
+                    // Store values for calculated_power
+                    double flow = -127;
+                    double tdiff = -127;
                     // Decode
                     uint8_t i = 19; // Skip start header and fixed data header
                     while(i < this->data_.size()-3){
@@ -186,8 +191,9 @@ void SensoStarComponent::loop() {
                         }
                         else if ( (vif&0x78) == 0x38 && f == 0x00){ // Volume Flow (m3/h)
 #ifdef USE_SENSOR
+                            flow = convert_value(result, (vif&0x07) - 6);
                             if (this->flow_sensor_)
-                                this->flow_sensor_->publish_state(convert_value(result, (vif&0x07) - 6));
+                                this->flow_sensor_->publish_state(flow);
 #endif
                         }
                         else if ( (vif&0x7C) == 0x58 && f == 0x00){ // Flow Temperature (C)
@@ -204,8 +210,9 @@ void SensoStarComponent::loop() {
                         }
                         else if ( (vif&0x7C) == 0x60 && f == 0x00){ // Temperature Difference (K)
 #ifdef USE_SENSOR
+                            tdiff = convert_value(result, (vif&0x03) - 3);
                             if (this->temperature_diff_sensor_)
-                                this->temperature_diff_sensor_->publish_state(convert_value(result, (vif&0x03) - 3));
+                                this->temperature_diff_sensor_->publish_state(tdiff);
 #endif
                         }
                         else if ( this->data_[i_VIF] == 0xfd && this->data_[i_VIF+1] == 0x17 ) { // Error flags (binary)
@@ -276,6 +283,18 @@ void SensoStarComponent::loop() {
                             break;
                         }
                     }
+                    
+#ifdef USE_SENSOR
+                    if (this->calculated_power_sensor_) {
+                        if (tdiff == -127 || flow == -127)
+                            this->calculated_power_sensor_->publish_state(NAN);
+                        else if (flow > 0)
+                            this->calculated_power_sensor_->publish_state(flow / 3.6 * 4190 * tdiff);
+                        else
+                            this->calculated_power_sensor_->publish_state(0);
+                    }
+#endif
+
                 }
             }
             
