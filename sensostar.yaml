@@ -95,6 +95,8 @@ sensor:
       name: "SensoStar Return Temperature"
     temperature_diff:
       name: "SensoStar Temperature Difference"
+    calculated_power:
+      name: "SensoStar Calculated Power"
       
   - platform: adc
     pin: GPIO1

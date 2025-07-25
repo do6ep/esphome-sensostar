@@ -28,6 +28,7 @@ class SensoStarComponent : public PollingComponent, public uart::UARTDevice {
   SUB_SENSOR(temperature_flow)
   SUB_SENSOR(temperature_return)
   SUB_SENSOR(temperature_diff)
+  SUB_SENSOR(calculated_power)
 #endif
 
 #ifdef USE_TEXT_SENSOR
