@@ -191,6 +191,7 @@ binary_sensor:
   - platform: status
     name: "ESP Status"
     id: esp_status
+    internal: true  # hide from Home Assistant unless needed    
 
 globals:
   - id: wifi_connected
