@@ -149,7 +149,7 @@ script:
   - id: ap_mode_blink
     mode: restart
     then:
-      - logger.log: "AP mode blinking started"
+#      - logger.log: "AP mode blinking started"
       - while:
           condition:
             lambda: 'return !id(wifi_connected);'
