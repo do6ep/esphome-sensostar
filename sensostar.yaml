@@ -176,7 +176,7 @@ button:
       then:
         - script.execute: read_adc_script
   - platform: template
-    name: "Read WiFi Signal Now"
+    name: "Read WiFi Signal now"
     on_press:
       then:
         - component.update: wifi_signal_sensor        
