@@ -104,7 +104,7 @@ Below is a visual example of the wired hardware setup.
    wifi_password: "YourPassword"
    api_encryption_key: "YourAPIKey"  # Generate with: openssl rand -base64 32
    ```
-   [Generate the key online] https://www.cryptool.org/en/cto/openssl/
+   [Generate the key online] (https://www.cryptool.org/en/cto/openssl/)
    
 4. **Build and upload your firmware:**
    ```bash
