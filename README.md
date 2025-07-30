@@ -110,6 +110,12 @@ Below is a visual example of the wired hardware setup.
    cd path\to\your\config
    esphome run sensostar.yaml
    ```
+   
+5. **Fallback in case no credential were found**
+   ```bash
+   You can then access the device's web interface at the default IP address 192.168.4.1
+   and enter your SSID and password
+   ```
 
 ---
 

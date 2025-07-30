@@ -7,6 +7,10 @@ esphome:
     then:
       - output.turn_on: adc_control  # IO14 HIGH at boot
       - script.execute: read_adc_script  # Immediately read ADC once at boot
+      - lambda: |-
+          if (!id(wifi_connected)) {
+            id(ap_mode_blink).execute();
+          }      
     
 esp32:
   board: esp32-s3-devkitc-1
@@ -19,16 +23,20 @@ psram:
   speed: 80MHz
 
 wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
+# Uncomment this if you have ented your credentials in the secrets.yaml
+# anyway at least the api_encryption_key: section must be present in the secrets.yaml
+#  ssid: !secret wifi_ssid
+#  password: !secret wifi_password
+
   ap:
     ssid: "SensoStar"
   reboot_timeout: 0s 
   
   on_connect:
+    - script.stop: ap_mode_blink
     - output.turn_on: wifi_led
   on_disconnect:
-    - output.turn_off: wifi_led
+    - script.execute: ap_mode_blink
     
 captive_portal:
 
@@ -52,11 +60,11 @@ external_components:
   - source: github://pr#8103
     components: [uart]
   - source:
-      type: local
-      path: !secret local_path
-      #type: git                                         # Be careful ESPhome is caching the repository. Do the following to update the cache
-      #url: https://github.com/STB3/esphome-sensostar    # Deleting the .esphome/external_components/ cache, or 
-      #ref: main  # or a specific commit SHA             # Using a ref: to pin to a specific commit or branch.
+      #type: local
+      #path: !secret local_path
+      type: git                                         # Be careful ESPhome is caching the repository. Do the following to update the cache
+      url: https://github.com/STB3/esphome-sensostar    # Deleting the .esphome/external_components/ cache, or 
+      ref: main  # or a specific commit SHA             # Using a ref: to pin to a specific commit or branch.
     components: [ SensoStar_MBus ]
 
 time:
@@ -104,7 +112,7 @@ sensor:
     name: "SensoStar Battery Level"
     update_interval: never  # done by interval:
     filters:
-      - lambda: return x * 3.6 * 0.919; # Vbat is measured via a resistive divider 39k--o--15k, 0.919 ADC special scaling factor hand measured
+      - lambda: return x * 3.6; # Vbat is measured via a resistive divider 39k--o--15k
 
   - platform: wifi_signal
     name: "SensoStar WiFi Signal"
@@ -138,6 +146,19 @@ script:
       - component.update: adc_input_sensor  # Trigger ADC read
       - output.turn_on: adc_control      # Set IO14 HIGH
 
+  - id: ap_mode_blink
+    mode: restart
+    then:
+      - logger.log: "AP mode blinking started"
+      - while:
+          condition:
+            lambda: 'return !id(wifi_connected);'
+          then:
+            - output.turn_on: wifi_led
+            - delay: 200ms
+            - output.turn_off: wifi_led
+            - delay: 1000ms  
+
 interval:
   - interval: 600s
     then:
@@ -166,4 +187,14 @@ light:
     output: heartbeat_output
     internal: true  # hide from Home Assistant unless needed
     
+binary_sensor:
+  - platform: status
+    name: "ESP Status"
+    id: esp_status
+
+globals:
+  - id: wifi_connected
+    type: bool
+    restore_value: no
+    initial_value: 'false'
  
