@@ -17,6 +17,10 @@ esp32:
   flash_size: 8MB
   framework:
     type: esp-idf
+    sdkconfig_options:
+      CONFIG_SPIRAM_SUPPORT: "n"
+
+    #type: arduino  # arduino works only if the module has at least 2MB PSRAM
     
 psram:
   mode: octal

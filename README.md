@@ -78,7 +78,7 @@ Below is a visual example of the wired hardware setup.
 
 <img src="pictures/sensostar_hw_1.png" alt="SensoStar Hardware Example" width="400px">
 
-<img src="pictures/sensostar_hw_2.png" alt="SensoStar Hardware Example" width="400px">
+<img src="pictures/ESP_Sensostar.png" alt="SensoStar Hardware Example" width="800px">
 
 ---
 
