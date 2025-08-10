@@ -11,6 +11,7 @@ esphome:
           if (!id(wifi_connected)) {
             id(ap_mode_blink).execute();
           }      
+          id(api_key_text).publish_state("${api_key_display}");          
     
 esp32:
   board: esp32-s3-devkitc-1
@@ -123,10 +124,22 @@ sensor:
     id: wifi_signal_sensor
     update_interval: 60s      
 
+substitutions:
+  api_key_display: !secret api_encryption_key
+
 text_sensor:
   - platform: SensoStar_MBus
     status:
       name: "SensoStar Status"
+
+  # Show API encryption key in the web interface
+  - platform: template
+    name: "API Encryption Key"
+    id: api_key_text
+    entity_category: config
+    lambda: |-
+      return std::string("${api_key_display}");
+    update_interval: never   
 
 output:
   - platform: gpio
