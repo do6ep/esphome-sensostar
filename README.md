@@ -4,7 +4,7 @@
 
 This ESPHome integration enables reading detailed heat consumption data from Engelmann SensoStar U heat meters and makes it available in Home Assistant.
 
-Same as Project from STB3 but this one uses "ESP-C3 Super Mini".
+Same as Project from STB3 but this one uses "ESP-C3 Super Mini" including PCB-Data for production.
 
 
 ---
