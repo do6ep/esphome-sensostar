@@ -86,7 +86,7 @@ Below is a visual example of the wired hardware setup.
 
 ### Schematics
 
-<img src="pictures/schematics.pdf" alt="SensoStar Hardware Example" width="800px">
+<img src="pictures/schematics_v1.1.png" alt="SensoStar Hardware Example" width="800px">
 
 ---
 
