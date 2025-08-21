@@ -6,6 +6,7 @@ This ESPHome integration enables reading detailed heat consumption data from Eng
 
 Same as Project from STB3 but this one uses "ESP-C3 Super Mini" **including PCB-Data** for production.
 
+Boards can currently be ordered from AISLER (https://aisler.net/p/IZCPMTQC).
 
 ---
 
