@@ -4,6 +4,9 @@
 
 This ESPHome integration enables reading detailed heat consumption data from Engelmann SensoStar U heat meters and makes it available in Home Assistant.
 
+Same as Project from STB3 but this one uses "ESP-C3 Super Mini".
+
+
 ---
 
 ## 🔧 Features
@@ -29,7 +32,6 @@ This ESPHome integration enables reading detailed heat consumption data from Eng
   - Template button in Home Assistant for instant Wi-Fi signal strength reading
 
 - 💡 **LED Indicators**
-  - Flash programming
   - Wi-Fi connection status
   - Heartbeat (device activity)
   - New data received from the SensoStar meter
@@ -38,8 +40,8 @@ This ESPHome integration enables reading detailed heat consumption data from Eng
 
 ## 🧪 Requirements
 
-- ESP32-S3 DevKitC-1 (8MB Flash)
-- Engelmann SensoStar U meter without any optional interfaces
+- ESP32-C3 SuperMini (4MB Flash)
+- Engelmann SensoStar U or E meter without any optional interfaces
 - ESPHome installed on your system
 - Home Assistant (optional but recommended)
 
@@ -75,16 +77,19 @@ The SensoStar meter uses a 12-pin internal connector for communication and power
 Below is a visual example of the wired hardware setup.
 
 ### Image
+**to be updated**
 
 <img src="pictures/Sensostar_w_ESP32_Sensostar.png" alt="SensoStar Hardware Example" width="800px">
 
 <img src="pictures/ESP_Sensostar.png" alt="SensoStar Hardware Example" width="800px">
 
 ### Web-Interface
+**to be updated**
 
 <img src="pictures/Sensostar_ESP_WebIF.png" alt="SensoStar Hardware Example" width="600px">
 
 ### Schematics
+**to be updated**
 
 <img src="pictures/ESP32_Sensostar.png" alt="SensoStar Hardware Example" width="800px">
 
@@ -100,7 +105,7 @@ Below is a visual example of the wired hardware setup.
    external_components:
      - source:
          type: git
-         url: https://github.com/STB3/esphome-sensostar
+         url: https://github.com/do6ep/esphome-sensostar
        components: [ SensoStar_MBus ]
    ```
 
@@ -152,8 +157,8 @@ secrets.yaml
 
 ## 📫 Contact
 
-Maintained by **STB3**  
-For issues or feature requests, open an issue in the [GitHub repository](https://github.com/STB3/esphome-sensostar/issues).
+Maintained by **do6ep**  
+For issues or feature requests, open an issue in the [GitHub repository](https://github.com/do6ep/esphome-sensostar/issues).
 
 ---
 
