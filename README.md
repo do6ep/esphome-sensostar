@@ -77,21 +77,16 @@ The SensoStar meter uses a 12-pin internal connector for communication and power
 Below is a visual example of the wired hardware setup.
 
 ### Image
-**to be updated**
 
-<img src="pictures/Sensostar_w_ESP32_Sensostar.png" alt="SensoStar Hardware Example" width="800px">
-
-<img src="pictures/ESP_Sensostar.png" alt="SensoStar Hardware Example" width="800px">
+<img src="pictures/sensostar_hw_C3_1.png" alt="SensoStar Hardware Example" width="800px">
 
 ### Web-Interface
-**to be updated**
 
 <img src="pictures/Sensostar_ESP_WebIF.png" alt="SensoStar Hardware Example" width="600px">
 
 ### Schematics
-**to be updated**
 
-<img src="pictures/ESP32_Sensostar.png" alt="SensoStar Hardware Example" width="800px">
+<img src="pictures/schematics.pdf" alt="SensoStar Hardware Example" width="800px">
 
 ---
 
