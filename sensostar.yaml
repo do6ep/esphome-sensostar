@@ -18,7 +18,7 @@ esp32:
   board: esp32-c3-devkitm-1
   flash_size: 4MB
   framework:
-    type: arduino
+    type: esp-idf
 
 wifi:
 # Uncomment this if you have ented your credentials in the secrets.yaml
@@ -40,7 +40,7 @@ captive_portal:
 
 logger:
   level: info
-  hardware_uart: USB_CDC
+#  hardware_uart: USB_CDC
 
 api:
   encryption:
@@ -207,5 +207,6 @@ globals:
     restore_value: no
     initial_value: 'false'
  
+
 
 
