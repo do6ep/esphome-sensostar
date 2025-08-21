@@ -8,11 +8,6 @@ esphome:
       - output.turn_on: adc_control  # IO1 HIGH at boot
       - script.execute: read_adc_script  # Immediately read ADC once at boot
       - delay: 2000ms  # Kurze Wartezeit, damit WLAN-Status gesetzt wird
-      - if:
-          condition:
-            lambda: 'return !id(wifi_connected);'
-          then:
-            - script.execute: ap_mode_blink      
       - lambda: |-
           if (!id(wifi_connected)) {
             id(ap_mode_blink).execute();
@@ -34,13 +29,12 @@ wifi:
   ap:
     ssid: "SensoStar"
   reboot_timeout: 0s 
-  
+
   on_connect:
-    then:
-      - lambda: 'id(wifi_connected) = true;'
+    - script.stop: ap_mode_blink
+    - output.turn_on: wifi_led
   on_disconnect:
-    then:
-      - lambda: 'id(wifi_connected) = false;'
+    - script.execute: ap_mode_blink
     
 captive_portal:
 
@@ -72,7 +66,7 @@ time:
   - platform: sntp
     id: sntp_time
     timezone: Europe/Amsterdam
-    servers: ["0.de.pool.ntp.org", "1.de.pool.ntp.org", "2.de.pool.ntp.org", "3.de.pool.ntp.org"]
+    servers: ["0.de.pool.ntp.org", "1.de.pool.ntp.org", "2.de.pool.ntp.org"]
 
 uart:
   - id: uart_mbus
@@ -172,7 +166,6 @@ script:
               - delay: 200ms
               - output.turn_off: wifi_led
               - delay: 1000ms
-      - output.turn_off: wifi_led  # LED aus beim Verlassen des AP-Modus 
 
 interval:
   - interval: 600s
@@ -183,15 +176,6 @@ interval:
       - light.turn_on: heartbeat_led
       - delay: 500ms
       - light.turn_off: heartbeat_led      
-  - interval: 1s
-    then:
-      - if:
-          condition:
-            lambda: 'return id(wifi_connected);'
-          then:
-            - output.turn_on: wifi_led
-          else:
-            - output.turn_off: wifi_led
 
 button:
   - platform: template
@@ -223,4 +207,5 @@ globals:
     restore_value: no
     initial_value: 'false'
  
+
 
