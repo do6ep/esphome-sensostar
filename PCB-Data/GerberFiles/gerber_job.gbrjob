@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2025-08-21T16:42:32Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.6.2"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 2,
+        "Name": {
+            "ProjectId": "untitled_v2"
+        },
+        "Owner": "Do6ep Do6ep <do6ep@l30.de>",
+        "Size": {
+            "X": 28.702,
+            "Y": 56.007
+        }
+    }
+}
