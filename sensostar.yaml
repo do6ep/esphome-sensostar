@@ -2,30 +2,28 @@ esphome:
   name: sensostar
   comment: SensoStar Energy Meter
   platformio_options:
-    board_build.arduino.memory_type: qio_opi
+    board_build.arduino.memory_type: dio
   on_boot:
     then:
-      - output.turn_on: adc_control  # IO14 HIGH at boot
+      - output.turn_on: adc_control  # IO1 HIGH at boot
       - script.execute: read_adc_script  # Immediately read ADC once at boot
+      - delay: 2000ms  # Kurze Wartezeit, damit WLAN-Status gesetzt wird
+      - if:
+          condition:
+            lambda: 'return !id(wifi_connected);'
+          then:
+            - script.execute: ap_mode_blink      
       - lambda: |-
           if (!id(wifi_connected)) {
             id(ap_mode_blink).execute();
           }      
-          id(api_key_text).publish_state("${api_key_display}");          
+          id(api_key_text).publish_state("${api_key_display}");
     
 esp32:
-  board: esp32-s3-devkitc-1
-  flash_size: 8MB
+  board: esp32-c3-devkitm-1
+  flash_size: 4MB
   framework:
-    type: esp-idf
-    sdkconfig_options:
-      CONFIG_SPIRAM_SUPPORT: "n"
-
-    #type: arduino  # arduino works only if the module has at least 2MB PSRAM
-    
-psram:
-  mode: octal
-  speed: 80MHz
+    type: arduino
 
 wifi:
 # Uncomment this if you have ented your credentials in the secrets.yaml
@@ -38,17 +36,17 @@ wifi:
   reboot_timeout: 0s 
   
   on_connect:
-    - script.stop: ap_mode_blink
-    - output.turn_on: wifi_led
+    then:
+      - lambda: 'id(wifi_connected) = true;'
   on_disconnect:
-    - script.execute: ap_mode_blink
+    then:
+      - lambda: 'id(wifi_connected) = false;'
     
 captive_portal:
 
 logger:
   level: info
-  hardware_uart: UART0
-  baud_rate: 115200
+  hardware_uart: USB_CDC
 
 api:
   encryption:
@@ -62,13 +60,11 @@ web_server:
   port: 80
     
 external_components:
-  - source: github://pr#8103
-    components: [uart]
   - source:
       #type: local
       #path: !secret local_path
       type: git                                         # Be careful ESPhome is caching the repository. Do the following to update the cache
-      url: https://github.com/STB3/esphome-sensostar    # Deleting the .esphome/external_components/ cache, or 
+      url: https://github.com/do6ep/esphome-sensostar    # Deleting the .esphome/external_components/ cache, or 
       ref: main  # or a specific commit SHA             # Using a ref: to pin to a specific commit or branch.
     components: [ SensoStar_MBus ]
 
@@ -76,15 +72,14 @@ time:
   - platform: sntp
     id: sntp_time
     timezone: Europe/Amsterdam
-    servers: ["0.nl.pool.ntp.org", "1.nl.pool.ntp.org", "2.nl.pool.ntp.org"]
+    servers: ["0.de.pool.ntp.org", "1.de.pool.ntp.org", "2.de.pool.ntp.org", "3.de.pool.ntp.org"]
 
 uart:
   - id: uart_mbus
-    tx_pin: GPIO39
-    rx_pin: GPIO38
+    tx_pin: GPIO21
+    rx_pin: GPIO20
     baud_rate: 2400
     parity: EVEN
-    rx_full_threshold: 1
     
 SensoStar_MBus:
   id: sensostar_id
@@ -112,7 +107,7 @@ sensor:
       name: "SensoStar Calculated Power"
       
   - platform: adc
-    pin: GPIO1
+    pin: GPIO0
     id: adc_input_sensor
     name: "SensoStar Battery Level"
     update_interval: never  # done by interval:
@@ -143,38 +138,41 @@ text_sensor:
 
 output:
   - platform: gpio
-    pin: GPIO14
+    pin: GPIO01
     id: adc_control
   - platform: gpio
-    pin: GPIO42
+    pin:
+      number: GPIO8 # builtin LED
+      inverted: true
     id: heartbeat_output
   - platform: gpio
-    pin: GPIO2
+    pin: GPIO6
     id: wifi_led
   - platform: gpio
-    pin: GPIO41
+    pin: GPIO5
     id: mbus_data_led    
  
 script:
   - id: read_adc_script
     then:
-      - output.turn_off: adc_control     # Set IO14 LOW
+      - output.turn_off: adc_control     # Set IO1 LOW
       - delay: 8ms  # wait until the capacitor on the resistive divider is charged
       - component.update: adc_input_sensor  # Trigger ADC read
-      - output.turn_on: adc_control      # Set IO14 HIGH
+      - output.turn_on: adc_control      # Set IO1 HIGH
 
   - id: ap_mode_blink
     mode: restart
     then:
-#      - logger.log: "AP mode blinking started"
+      - logger.log: "AP mode blinking started"
       - while:
-          condition:
-            lambda: 'return !id(wifi_connected);'
-          then:
-            - output.turn_on: wifi_led
-            - delay: 200ms
-            - output.turn_off: wifi_led
-            - delay: 1000ms  
+            condition:
+              lambda: 'return !id(wifi_connected);'
+            then:
+              - output.turn_on: wifi_led
+              - delay: 200ms
+              - output.turn_off: wifi_led
+              - delay: 1000ms
+      - output.turn_off: wifi_led  # LED aus beim Verlassen des AP-Modus 
 
 interval:
   - interval: 600s
@@ -185,6 +183,15 @@ interval:
       - light.turn_on: heartbeat_led
       - delay: 500ms
       - light.turn_off: heartbeat_led      
+  - interval: 1s
+    then:
+      - if:
+          condition:
+            lambda: 'return id(wifi_connected);'
+          then:
+            - output.turn_on: wifi_led
+          else:
+            - output.turn_off: wifi_led
 
 button:
   - platform: template
@@ -216,3 +223,4 @@ globals:
     restore_value: no
     initial_value: 'false'
  
+
