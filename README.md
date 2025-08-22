@@ -4,7 +4,7 @@
 
 This ESPHome integration enables reading detailed heat consumption data from Engelmann SensoStar U heat meters and makes it available in Home Assistant.
 
-Same as Project from STB3 but this one uses "ESP-C3 Super Mini" **including PCB-Data** for production.
+Same as Project from STB3 but this one uses "ESP32-C3 Super Mini" **including PCB-Data** for production.
 
 Boards can currently be ordered from AISLER (https://aisler.net/p/IZCPMTQC).
 
