@@ -28,6 +28,9 @@ Boards can currently be ordered from AISLER (https://aisler.net/p/IZCPMTQC).
   - OTA updates
   - Web dashboard (optional)
 
+- 🔗 **MQTT Integration**
+  - Optional MQTT support
+
 - 🕹 **Controls**
   - Template button in Home Assistant for instant battery reading
   - Template button in Home Assistant for instant Wi-Fi signal strength reading
