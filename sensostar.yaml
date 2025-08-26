@@ -40,7 +40,7 @@ captive_portal:
 
 logger:
   level: info
-#  hardware_uart: USB_CDC
+#  hardware_uart: USB_CDC     # Not useable when using Type: esp-idf
 
 api:
   encryption:
@@ -52,7 +52,15 @@ ota:
 web_server:
   version: 3
   port: 80
-    
+
+# Uncomment if you need mqtt-support and you have ented your credentials in the secrets.yaml
+# mqtt_host:, mqtt_username: and mqtt_password: section must be present in the secrets.yaml
+#mqtt:
+#  broker: !secret mqtt_host          # IP of your MQTT-Host
+#  username: !secret mqtt_username    # MQTT User Name
+#  password: !secret mqtt_password    # MQTT Password
+#  id: mqtt_sensostar                 # MQTT Client-ID
+
 external_components:
   - source:
       #type: local
