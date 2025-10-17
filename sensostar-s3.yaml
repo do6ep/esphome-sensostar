@@ -24,7 +24,6 @@ esphome:
           if (!id(wifi_connected)) {
             id(ap_mode_blink).execute();
           }      
-          id(api_key_text).publish_state("${api_key_display}");  
       - if:
           condition:
             switch.is_on: mqtt_client_switch
@@ -66,7 +65,6 @@ api:
 
 ota:
   platform: esphome
-  password: ""  # set OTA-Password if needed
 
 # Disable onboard bluetooth (powersave / because its not used)
 esp32_ble:
@@ -102,7 +100,7 @@ wifi:
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "SensoStar Fallback Hotspot"
-    password: "01234567"
+    password: "01234567"  # please change pasword for fallback hotspot
 
 # Captive portal configuration
 captive_portal:
@@ -114,7 +112,6 @@ web_server:
 mqtt:
   id: mqtt_client
   broker: ""      # IP of your MQTT-Host, will be set trough GUI
-  port: ""        # MQTT Port, will be set trough GUI
   username: ""    # MQTT User Name, will be set trough GUI
   password: ""    # MQTT Password, will be set trough GUI
   enable_on_boot: false
@@ -210,6 +207,9 @@ sensor:
     loop_time:
       name: "SensoStar ESP32 Loop Time"    
 
+debug:
+  update_interval: 5s
+
 text_sensor:
   - platform: SensoStar_MBus
     status:
@@ -221,22 +221,25 @@ text_sensor:
 
 output:
   - platform: gpio
-    pin: GPIO01
+    pin:
+      number: GPIO8
+      inverted: false
     id: adc_control
-
+  - platform: gpio
+    pin: 
+      number: GPIO1
+      inverted: true
+    id: mbus_data_led
+  - platform: gpio
+    pin: 
+      number: GPIO2
+      inverted: true
+    id: wifi_led
   - platform: gpio
     pin:
-      number: GPIO8 # builtin LED
+      number: GPIO21 # builtin LED
       inverted: true
-    id: heartbeat_output
-
-  - platform: gpio
-    pin: GPIO6
-    id: wifi_led
-
-  - platform: gpio
-    pin: GPIO5
-    id: mbus_data_led    
+    id: heartbeat_output 
  
 script:
   - id: read_adc_script
