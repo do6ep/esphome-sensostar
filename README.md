@@ -8,6 +8,9 @@ Same as Project from STB3 but this one uses "ESP32-C3 Super Mini" **including PC
 
 Boards can currently be ordered from AISLER (https://aisler.net/p/IZCPMTQC).
 
+** Now testing with "Xaio ESP32S3" this Module is more powerfull.
+** Rev. 2 with "Xaio ESP32S3" is in work.
+
 ---
 
 ## 🔧 Features
@@ -22,6 +25,7 @@ Boards can currently be ordered from AISLER (https://aisler.net/p/IZCPMTQC).
   - Temperature difference (ΔT)
   - Meter status (text)
   - Battery voltage (via ADC)
+  - Battery Status
 
 - 🧠 **Home Assistant Integration**
   - Native API support
@@ -29,7 +33,7 @@ Boards can currently be ordered from AISLER (https://aisler.net/p/IZCPMTQC).
   - Web dashboard (optional)
 
 - 🔗 **MQTT Integration**
-  - Optional MQTT support
+  - Configurable MQTT support via web UI (thanks to the work of STB3)
 
 - 🕹 **Controls**
   - Template button in Home Assistant for instant battery reading
@@ -37,23 +41,25 @@ Boards can currently be ordered from AISLER (https://aisler.net/p/IZCPMTQC).
 
 - 💡 **LED Indicators**
   - Wi-Fi connection status
-  - Heartbeat (device activity)
   - New data received from the SensoStar meter
+  - Heartbeat (device activity, via builtin LED)
+
 
 ---
 
 ## 🧪 Requirements
 
-- ESP32-C3 SuperMini (4MB Flash)
+- ESP32-C3 SuperMini (4MB Flash) or Xaio ESP32S3 (4MB Flash) 
 - Engelmann SensoStar U or E meter without any optional interfaces
 - ESPHome installed on your system
 - Home Assistant (optional but recommended)
+
 
 ---
 
 ## 🔌 Hardware Wiring
 
-The SensoStar meter uses a 12-pin internal connector for communication and power. Below is the pinout and how to wire it to an ESP32-S3:
+The SensoStar meter uses a 12-pin internal connector for communication and power. Below is the pinout and how to wire it to an ESP32:
 
 | Pin | Function                     | Connection                                     |
 |-----|------------------------------|------------------------------------------------|
