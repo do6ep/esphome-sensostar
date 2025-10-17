@@ -314,7 +314,7 @@ void SensoStarComponent::loop() {
                         if (tdiff == -127 || flow == -127)
                             this->calculated_power_sensor_->publish_state(NAN);
                         else if (flow > 0)
-                            this->calculated_power_sensor_->publish_state(flow / 3.6 * 4190 * tdiff);
+                            this->calculated_power_sensor_->publish_state(flow / 3.6 * 4193 * tdiff);
                         else
                             this->calculated_power_sensor_->publish_state(0);
                     }
@@ -349,7 +349,8 @@ void SensoStarComponent::loop() {
             this->last_transmission_ = now;
             this->last_send_tx_offset_ = sizeof(request_message) * 11 * 1000 / 2400;
             this->receiving_ = 1;
-            this->init_state_ = 0x02;        }
+            this->init_state_ = 0x02;
+        }
         else if (this->init_state_ == 0x12 || this->init_state_ == 0x03){
             uint8_t request_message[] = { 0x68, 0x08, 0x08, 0x68, 0x73, 0xFE, 0x51, 0x0F, 0x00, 0x00, 0x00, 0x5D, 0x2E, 0x16 };
             ESP_LOGV(TAG, "M-Bus write: %s", format_hex_pretty(request_message, sizeof(request_message)).c_str());
@@ -384,7 +385,8 @@ void SensoStarComponent::loop() {
             this->last_transmission_ = now;
             this->last_send_tx_offset_ = sizeof(request_message) * 11 * 1000 / 2400;
             this->receiving_ = 1;
-            this->init_state_ = 0x04;        }
+            this->init_state_ = 0x04;
+        }
         else if (this->init_state_ == 0x14 || this->init_state_ == 0x05){
             uint8_t request_message[] = { 0x68, 0x09, 0x09, 0x68, 0x53, 0xFE, 0x51, 0x0F, 0x00, 0x00, 0x00, 0x59, 0x0C, 0x16, 0x16 };
             ESP_LOGV(TAG, "M-Bus write: %s", format_hex_pretty(request_message, sizeof(request_message)).c_str());
@@ -392,9 +394,12 @@ void SensoStarComponent::loop() {
             this->last_transmission_ = now;
             this->last_send_tx_offset_ = sizeof(request_message) * 11 * 1000 / 2400;
             this->receiving_ = 1;
-            this->init_state_ = 0x05;        }
+            this->init_state_ = 0x05;
+        }
         else if (this->init_state_ == 0x15){
             this->init_state_ = 0xff;
+        }
+        else {
             uint8_t request_message[] = { 0x68, 0x11, 0x11, 0x68, 0x53, 0xFE, 0x51, 0x0F, 0x00, 0x00, 0x01, 0x59, 0x02, 0x03, 0x04, 0x06, 0x05, 0x07, 0x08, 0x09, 0x0B, 0x00, 0x16 };
 
             // FCB bit
