@@ -53,10 +53,10 @@ class SensoStarComponent : public PollingComponent, public uart::UARTDevice {
   uint16_t last_send_tx_offset_{0};
   uint8_t receiving_{0};
   uint8_t init_state_{0};
+  bool trigger_next_{true};
+  bool FCB_;
   output::BinaryOutput *data_led_{nullptr}; // LED related
   uint32_t data_led_off_time_{0}; // LED related
-    bool trigger_next_{true};
-  bool FCB_;
 
 };
 
