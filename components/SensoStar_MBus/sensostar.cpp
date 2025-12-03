@@ -142,6 +142,9 @@ void SensoStarComponent::loop() {
                     ESP_LOGW(TAG, "Unknown frame");
                 }
                 else {
+                    // Store values for calculated_power
+                    double flow = -127;
+                    double tdiff = -127;
                     // Store values for energy calculation
                     int32_t power = -127;
                     float energy = -127;
